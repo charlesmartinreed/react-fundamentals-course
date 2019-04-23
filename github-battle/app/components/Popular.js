@@ -1,7 +1,8 @@
 var React = require('react');
 var PropTypes = require('prop-types');
+var api = require('../utils/api');
 
-// stateless functional component 
+// stateless functional component
 function SelectLanguage(props) {
 	var languages = ['All', 'JavaScript', 'Ruby', 'Java', 'CSS', 'Python'];
 
@@ -32,18 +33,35 @@ class Popular extends React.Component {
 	constructor(props) {
 		super(props)
 		this.state = {
-			selectedLanguage: 'All'
+			selectedLanguage: 'All',
+			repos: null
 		}
 		/* remember that update lanuage is not automagically bound to the this keyword that corresponds to our Popular component instance. Now it is.*/
 		this.updateLanguage = this.updateLanguage.bind(this);
 	}
 
+	componentDidMount() {
+		/* This lifecycle event is where you'll want to make any AJAX requests */
+		this.updateLanguage(this.state.selectedLanguage);
+	}
+
 	updateLanguage(lang) {
 		this.setState(function() {
 			return {
-				selectedLanguage: lang
+				selectedLanguage: lang,
+				repos: null
 			}
-		})
+		});
+
+		/* again, because we're making another function inside of then, the 'this' in this.setState won't be what we might expect. We bind to tell the function which 'this' should apply here */
+		api.fetchPopularRepos(lang)
+		.then(function(repos) {
+			this.setState(function() {
+				return {
+					repos: repos
+				}
+			})
+		}.bind(this))
 	}
 
 	render() {
@@ -53,6 +71,7 @@ class Popular extends React.Component {
 					selectedLanguage={this.state.selectedLanguage}
 					onSelect={this.updateLanguage}
 				/>
+				{JSON.stringify(this.state.repos, null, 2)}
 			</div>
 		)
 	}
