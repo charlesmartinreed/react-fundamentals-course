@@ -5,7 +5,7 @@ class App extends React.Component {
 	render() {
 		/* return description of how the component looks */
 		return (
-			<div>
+			<div className="container">
 				<Popular />
 			</div>
 		)
