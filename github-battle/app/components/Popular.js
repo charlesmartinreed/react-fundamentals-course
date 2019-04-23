@@ -1,16 +1,41 @@
 var React = require('react');
 
 class Popular extends React.Component {
+	constructor(props) {
+		super(props)
+		this.state = {
+			selectedLanguage: 'All'
+		}
+		/* remember that update lanuage is not automagically bound to the this keyword that corresponds to our Popular component instance. Now it is.*/
+		this.updateLanguage = this.updateLanguage.bind(this);
+	}
+
+	updateLanguage(lang) {
+		this.setState(function() {
+			return {
+				selectedLanguage: lang
+			}
+		})
+	}
+
 	render() {
 		var languages = ['All', 'JavaScript', 'Ruby', 'Java', 'CSS', 'Python'];
-
+		/* onClick function is only invoked when we click*/
+		/* notice that we pass map a second argument, this, that gives it 'this' keyword scope. If we were using arrow functions for our inner function for map, we wouldn't have to pass this because arrow functions don't re-contextualize 'this' */
 		return (
 			<ul className="languages">
-				{languages.map(function(language) {
+
+				{languages.map(function(lang) {
 					return (
-						<li key={language}>{language}</li>
+						<li
+							style={lang === this.state.selectedLanguage ? { color: '#d0021b'} : null }
+							key={lang}
+							onClick={this.updateLanguage.bind(null, lang)}
+						>
+							{lang}
+						</li>
 					)
-				})}
+				}, this)}
 			</ul>
 		)
 	}
