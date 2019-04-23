@@ -12,6 +12,7 @@ class App extends React.Component {
 		return (
 			<div>
 				Hello World, from Charles!
+				No dist folder here, ya'll!
 			</div>
 		)
 	}
