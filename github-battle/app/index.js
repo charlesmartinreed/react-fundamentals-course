@@ -1,24 +1,36 @@
 var React = require('react');
 var ReactDOM = require('react-dom');
+// var PropTypes = require('prop-types');
 require('./index.css');
-
-// component can have state
-// component can have lifecycle events that let you hook into certain stages or lifecycles from your application
-// component is responsible for rendering UI
-
-class App extends React.Component {
-	render() {
-		/* return description of how the component looks */
-		return (
-			<div>
-				Hello World, from Charles!
-				No dist folder here, ya'll!
-			</div>
-		)
-	}
-}
+var App = require('./components/App');
 
 ReactDOM.render(
 	<App />,
 	document.getElementById('app')
 )
+
+/*
+
+OFFICIAL DOCUMENTATION:
+
+https://reactjs.org/docs/typechecking-with-proptypes.html
+
+<Component>.propTypes = {
+	img: PropTypes.string.isRequired,
+	name: PropTypes.string.isRequired,
+	username: PropTypes.string.isRequired
+}
+
+<Users>.propTypes = {
+	list: PropTypes.arrayOf(PropTypes.object)
+}
+
+<Users>.propTypes = {
+	list: PropTypes.arrayOf(PropTypes.shape({
+		name: PropTypes.string.isRequired,
+		friend: PropTypes.bool.isRequired
+}))
+}
+
+
+*/
