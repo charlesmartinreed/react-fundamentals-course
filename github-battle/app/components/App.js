@@ -1,13 +1,20 @@
 var React = require('react');
-var Popular = require('./Popular')
+var Popular = require('./Popular');
+var ReactRouter = require('react-router-dom');
+var Router = ReactRouter.BrowserRouter;
+var Route = ReactRouter.Route;
+var Nav = require('./Nav');
 
 class App extends React.Component {
+		/* render Router, set components to be rendered only at specific paths */
 	render() {
-		/* return description of how the component looks */
 		return (
+			<Router>
 			<div className="container">
-				<Popular />
+				<Nav />
+				<Route path='/popular' component={Popular} />
 			</div>
+			</Router>
 		)
 	}
 }
