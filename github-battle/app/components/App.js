@@ -9,6 +9,7 @@ var Switch = ReactRouter.Switch;
 var Nav = require('./Nav');
 var Home = require('./Home');
 var Battle = require('./Battle');
+var Results = require('./Results');
 
 // in the Switch component, if all other routes aren't active, the page path isn't a page we serve up. Instead we render 'Not Found'
 class App extends React.Component {
@@ -20,8 +21,9 @@ class App extends React.Component {
 				<Nav />
 				<Switch>
 					<Route exact path='/' component={Home} />
-					<Route path='/popular' component={Popular} />
 					<Route exact path='/battle' component={Battle} />
+					<Route path='/battle/results' component={Results} />
+					<Route path='/popular' component={Popular} />
 					<Route render={function() {
 						return <p>Not Found</p>
 					}} />
