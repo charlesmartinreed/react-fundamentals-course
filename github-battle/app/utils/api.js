@@ -3,22 +3,22 @@ var axios = require('axios');
 // github id stuff, in case you find yourself being rate limited
 var id = "YOUR_CLIENT_ID";
 var sec = "YOUR_SECRET_ID";
-var params = "?client_id=" + id + "&client_secret=" + sec;
+//var params = "?client_id=" + id + "&client_secret=" + sec;
 
 function getProfile(username) {
-	return axios.get('https://api.github.com/users/' + username + params)
+	return axios.get('https://api.github.com/users/' + username)
 		.then(function(user) {
 			return user.data;
 		})
 }
 
 function getRepos(username) {
-	return axios.get('https://api.github.com/users/' + username + '/repos' + params + '&per_page=100')
+	return axios.get('https://api.github.com/users/' + username + '/repos' + '?page=1&per_page=100')
 }
 
+// count is the initialValue, 0 since we passed in '0'
+// repo is the array from which we pull our accumulator values
 function getStarCount(repos) {
-	// count is the initialValue, 0 since we passed in '0'
-	// repo is the array from which we pull our accumulator values
 	return repos.data.reduce(function(count, repo) {
 		return count + repo.stargazers_count;
 	}, 0)
@@ -37,9 +37,9 @@ function handleError(error) {
 }
 
 // COMPOSING FUNCTION
+// axios.all is Promise.all
+// when have the player profile and their repos, we get an array of data
 function getUserData(player) {
-	// axios.all is Promise.all
-	// when have the player profile and their repos, we get an array of data
 	return axios.all([
 		getProfile(player),
 		getRepos(player)
@@ -61,21 +61,22 @@ function sortPlayers(players) {
 	})
 }
 
+// here's the real money - again, we're using axios.all to proceed only once we've received our payload
+// when resolved, battle will have all the player info.
+// then we sort
+
+// ping github API, get most popular repos for particular language
+// return repositories with more than 1 star, filtered by the language we pass to the call, sorted by amount of stars in desc order
+
+// encodeURI will convert our human-readable characters into corresponding query strings, etc.
 module.exports = {
-	// here's the real money - again, we're using axios.all to proceed only once we've received our payload
-	// when resolved, battle will have all the player info.
-	// then we sort
 	battle: function(players) {
 		return axios.all(players.map(getUserData))
 			.then(sortPlayers)
 			.catch(handleError)
-	}
+	},
 
 	fetchPopularRepos: function (language) {
-		// ping github API, get most popular repos for particular language
-		// return repositories with more than 1 star, filtered by the language we pass to the call, sorted by amount of stars in desc order
-
-		// encodeURI will convert our human-readable characters into corresponding query strings, etc.
 		var encodedURI = window.encodeURI('https://api.github.com/search/repositories?q=stars:>1+language:'+ language + '&sort=stars&order=desc&type=Repositories');
 
 		return axios.get(encodedURI).then(function(res) {
