@@ -2,10 +2,26 @@ var React = require('react');
 var queryString = require('query-string');
 var api = require('../utils/api');
 var Link = require('react-router-dom').Link;
+var PropTypes = require('prop-types');
+var PlayerPreview = require('./PlayerPreview');
 
-// player 1 and 2 information is actually embedded in props, inside of location -> search.
-// using queryString's parse method gives us an object that has a playerOne and playerTwo property
-// battle returns a promise that contains sorted results (array) for the winner and loser
+
+
+function Player(props) {
+	return (
+		<div>
+			<h1 className="header">{props.label}</h1>
+			<h3 style={{textAlign: 'center'}}>Score: {props.score}</h3>
+		</div>
+	)
+}
+
+Player.propTypes = {
+	label: PropTypes.string.isRequired,
+	score: PropTypes.number.isRequired,
+	profile: PropTypes.object.isRequired
+}
+
 class Results extends React.Component {
 	constructor(props) {
 		super(props);
@@ -62,7 +78,18 @@ class Results extends React.Component {
 		}
 
 		return (
-			<div>{JSON.stringify(this.state, null, 2)}</div>
+			<div className="row">
+				<Player
+					label="Winner"
+					score={winner.score}
+					profile={winner.profile}
+				/>
+				<Player
+					label="Loser"
+					score={loser.score}
+					profile={loser.profile}
+				/>
+			</div>
 		)
 	}
 }
